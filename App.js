@@ -11,10 +11,22 @@ import ProfileScreen from './screens/ProfileScren';
 import SignUpScreen from './screens/SignUpScreen';
 import FriendScreen from './screens/FriendScreen';
 
+import ListScreen from './screens/FriendOptions/ListScreen';
+import FindScreen from './screens/FriendOptions/FindScreen';
+import BanScreen from './screens/FriendOptions/BanScreen';
+
 const AppStack = createStackNavigator({
 	Home: HomeScreen,
 	Chat: ChatScreen,
 	Profile: ProfileScreen,
+});
+
+const FriendStack = createStackNavigator({
+	Friend: FriendScreen,
+	List: ListScreen,
+	Find: FindScreen,
+	Ban: BanScreen,
+	
 });
 
 AppStack.navigationOptions=({navigation})=>{
@@ -32,7 +44,7 @@ const SignUpStack = createStackNavigator({ SignUp: SignUpScreen });
 const TabNavigator = createBottomTabNavigator(
 	{
 		Chats: AppStack,
-		Friends: FriendScreen,
+		Friends: FriendStack,
 	},
 	{
 		defaultNavigationOptions: ({ navigation }) => ({

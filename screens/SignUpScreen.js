@@ -15,7 +15,10 @@ export default class SignUpScreen extends React.Component {
         password:'',
 		rePassword:'',
 		checkExisted: null,
-		userID: 0
+		userID: 0,
+		listFriend: '',
+		listBan:'',
+		listRequest:''
 	};
 	handleChange = (key) => (val) => {
 		this.setState({ [key]: val });
@@ -62,6 +65,9 @@ export default class SignUpScreen extends React.Component {
 					name: this.state.name,
 					password: this.state.password,
 					userID: this.state.userID,
+					listFriend: this.state.listFriend,
+					listBan: this.state.listBan,
+					listRequest: this.state.listRequest,
 				});
 				this.refs.loading.show(false);
 			// console.log(this.state.userID);

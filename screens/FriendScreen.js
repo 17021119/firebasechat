@@ -50,18 +50,28 @@ export default class HomeScreen extends React.Component {
 	render() {
 		return (
 			<SafeAreaView style={styles.containerFriendScreen}>
-				<TouchableOpacity style={styles.boxFriendOptions}>
+				<TouchableOpacity
+					style={styles.boxFriendOptions}
+					onPress={() => this.props.navigation.navigate('List')}
+				>
 					<Image style={styles.friendScreenIcon} source={require('../images/friend_1.png')} />
 					<Text style={styles.friendScreenText}>
 						Bạn bè <Text style={{ color: 'red' }}>{this.state.numFriend}</Text>
 					</Text>
 				</TouchableOpacity>
 
-				<TouchableOpacity style={styles.boxFriendOptions}>
+				<TouchableOpacity
+					style={styles.boxFriendOptions}
+					onPress={() => this.props.navigation.navigate('Find')}
+				>
 					<Image style={styles.friendScreenIcon} source={require('../images/search.png')} />
 					<Text style={styles.friendScreenText}>Tìm bạn bè</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={styles.boxFriendOptions}>
+
+				<TouchableOpacity
+					style={styles.boxFriendOptions}
+					onPress={() => this.props.navigation.navigate('Ban')}
+				>
 					<Image style={styles.friendScreenIcon} source={require('../images/ban.png')} />
 					<Text style={styles.friendScreenText}>Bạn bè đã chặn</Text>
 				</TouchableOpacity>
