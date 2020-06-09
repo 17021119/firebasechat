@@ -8,11 +8,13 @@ import HomeScreen from './screens/HomeScreen';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import ChatScreen from './screens/ChatScreen';
 import ProfileScreen from './screens/ProfileScren';
+import SignUpScreen from './screens/SignUpScreen';
+import FriendScreen from './screens/FriendScreen';
 
-const AppStack = createStackNavigator({ 
-  Home: HomeScreen, 
-  Chat: ChatScreen, 
-  // Profile: ProfileScreen,
+const AppStack = createStackNavigator({
+	Home: HomeScreen,
+	Chat: ChatScreen,
+	Profile: ProfileScreen,
 });
 
 AppStack.navigationOptions=({navigation})=>{
@@ -23,29 +25,31 @@ AppStack.navigationOptions=({navigation})=>{
 }
 
 const AuthStack = createStackNavigator({ Login: LoginScreen });
+const SignUpStack = createStackNavigator({ SignUp: SignUpScreen });
+
+
 
 const TabNavigator = createBottomTabNavigator(
 	{
 		Chats: AppStack,
-    Profile: ProfileScreen,
-    
+		Friends: FriendScreen,
 	},
 	{
-		defaultNavigationOptions: ({navigation})=> ({
-      tabBarIcon: ({ focused, horizontalm, tintColor})=>{
-        const {routeName} =navigation.state;
-        let imageName= require('./images/chats.png');
-        if(routeName === 'Profile'){
-          imageName = require('./images/settings.png');
-        }
-        return <Image source={imageName} style={{width:25, resizeMode: 'contain', tintColor}} />;
-      },
-    }),
-    tabBarOptions:{
-      activeTintColor: 'tomato',
-      inactiveTintColor: 'gray'
-    }
-	},
+		defaultNavigationOptions: ({ navigation }) => ({
+			tabBarIcon: ({ focused, horizontalm, tintColor }) => {
+				const { routeName } = navigation.state;
+				let imageName = require('./images/chats.png');
+				if (routeName === 'Friends') {
+					imageName = require('./images/friends.png');
+				}
+				return <Image source={imageName} style={{ width: 25, resizeMode: 'contain', tintColor }} />;
+			},
+		}),
+		tabBarOptions: {
+			activeTintColor: 'tomato',
+			inactiveTintColor: 'gray',
+		},
+	}
 );
 
 export default createAppContainer(
@@ -54,6 +58,7 @@ export default createAppContainer(
 			AuthLoading: AuthLoadingScreen,
 			App: TabNavigator,
 			Auth: AuthStack,
+			SignUp: SignUpStack,
 		},
 		{
 			initialRouteName: 'AuthLoading',

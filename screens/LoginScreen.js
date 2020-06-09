@@ -1,65 +1,77 @@
 import React from 'react';
-import { Alert,AsyncStorage, Text,TextInput, View,TouchableOpacity } from 'react-native';
+import { Alert, AsyncStorage, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 import User from '../User';
 import styles from '../constants/style';
+import Loading from 'react-native-whc-loading';
 
-
-export default class App extends React.Component{
-  static navigationOptions ={
-    header: null,
-  }
-  state={
-    phone: '',
-    name:''
-  }
-  handleChange= key=> val=> {
-    this.setState({[key]: val})
-  }
-  // componentDidMount(){
-  //   AsyncStorage.getItem('userPhone').then(val=>{
-  //     if(val){ 
-  //       this.setState({phone: val})
-  //     }
-  //   })
-  // }
-  submitForm= async()=>{
-    if(this.state.phone.length <10 ){
-      Alert.alert('Error', 'wrong phone number')
-    }
-    else if(this.state.name.length<3){
-      Alert.alert('Error', 'Wrong name')
-    }
-    else{
-      await AsyncStorage.setItem('userPhone', this.state.phone);
-      User.phone=this.state.phone;
-      firebase.database().ref('users/'+ User.phone).set({name:  this.state.name});
-      this.props.navigation.navigate('App');
-    }
-  }
-  render(){
-    return (
-      <View style={styles.container}>
-        <TextInput
-          placeholder="Phone number"
-          keyboardType='number-pad'
-          style={styles.input}
-          value={this.state.phone}
-          onChangeText={this.handleChange('phone')}
-        />
-        <TextInput
-          placeholder="Name"
-          style={styles.input}
-          value={this.state.name}
-          onChangeText={this.handleChange('name')}
-        />
-        <TouchableOpacity onPress={this.submitForm}>
-          <Text style={styles.btnText} >Enter</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-  
+export default class App extends React.Component {
+	static navigationOptions = {
+		header: null,
+	};
+	state = {
+		username: '',
+		password: '',
+		checkPass: '',
+	};
+	handleChange = (key) => (val) => {
+		this.setState({ [key]: val });
+	};
+	submitForm = async() => {
+		if (this.state.username.length < 4) {
+			Alert.alert('Error', 'Tài khoản phải có ít nhất 4 kí tự');
+		} else if (this.state.password.length < 4) {
+			Alert.alert('Error', 'Mật khẩu phải chứa ít nhất 4 kí tự');
+		} else {
+			this.refs.loading.show();
+			await AsyncStorage.setItem('username', this.state.username);
+			User.username = this.state.username;
+			await firebase
+				.database()
+				.ref('users/' + User.username)
+				.child('password')
+				.once('value', (snapshot) => {
+					this.state.checkPass = snapshot.val();
+				});
+			this.refs.loading.show(false);
+			if (this.state.password == this.state.checkPass) {
+				this.props.navigation.navigate('App');
+			} else {
+				Alert.alert('Đăng nhập không thành công', 'Tài khoản hoặc mật khẩu bạn nhập chưa đúng');
+			}
+		}
+	};
+	singUp = () => {
+		this.props.navigation.navigate('SignUp');
+	};
+	render() {
+		return (
+			<View style={styles.container}>
+				<TextInput
+					placeholder="Tài khoản"
+					style={styles.input}
+					value={this.state.username}
+					onChangeText={this.handleChange('username')}
+				/>
+				<TextInput
+					placeholder="Mật khẩu"
+					secureTextEntry={true}
+					style={styles.input}
+					value={this.state.password}
+					onChangeText={this.handleChange('password')}
+				/>
+				<TouchableOpacity onPress={this.submitForm}>
+					<Text style={styles.btnText}>Đăng nhập</Text>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={this.singUp}>
+					<Text style={styles.btnText}>Đăng kí</Text>
+				</TouchableOpacity>
+				<Loading
+					ref="loading"
+					backgroundColor="#ffffff"
+					indicatorColor=" #00ffcc"
+				/>
+			</View>
+		);
+	}
 }
-
-
