@@ -21,7 +21,7 @@ const isIOS = Platform.OS === 'ios';
 export default class ChatScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 		return {
-			title: navigation.getParam('name', null),
+			title: navigation.getParam('name'),
 		};
 	};
 	constructor(props) {

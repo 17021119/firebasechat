@@ -1,5 +1,6 @@
 import React from 'react';
 import {Image} from 'react-native';
+import { YellowBox } from 'react-native';
 import { createSwitchNavigator, createAppContainer} from 'react-navigation';
 import { createStackNavigator  } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -15,18 +16,25 @@ import ListScreen from './screens/FriendOptions/ListScreen';
 import FindScreen from './screens/FriendOptions/FindScreen';
 import BanScreen from './screens/FriendOptions/BanScreen';
 
+import ChangeNameScreen from './screens/ProfileOptions/ChangeNameScreen';
+import ChangePasswordScreen from './screens/ProfileOptions/ChangePasswordScreen';
+
 const AppStack = createStackNavigator({
 	Home: HomeScreen,
 	Chat: ChatScreen,
 	Profile: ProfileScreen,
 });
 
+const ProfileStack = createStackNavigator({
+	Profiles: ProfileScreen,
+	ChangeName: ChangeNameScreen,
+	ChangePassword: ChangePasswordScreen,
+});
 const FriendStack = createStackNavigator({
 	Friend: FriendScreen,
 	List: ListScreen,
 	Find: FindScreen,
-	Ban: BanScreen,
-	
+	Ban: BanScreen,	
 });
 
 AppStack.navigationOptions=({navigation})=>{
@@ -77,3 +85,6 @@ export default createAppContainer(
 		}
 	)
 );
+// console.ignoredYellowBox = ['Warning: Each'];
+// YellowBox.ignoreWarnings(['Warning: ...']);
+console.disableYellowBox = true;

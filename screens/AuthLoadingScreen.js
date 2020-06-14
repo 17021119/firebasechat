@@ -8,7 +8,6 @@ import {
 import firebase from 'firebase';
 import 'firebase/firestore'
 import User from '../User'
-// require('firebase/firestore')
 
 export default class AuthLoadingScreen extends React.Component {
   constructor(props) {
@@ -28,17 +27,15 @@ export default class AuthLoadingScreen extends React.Component {
     };
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
-        // firebase.analytics();
       }
 }
 
 
   _bootstrapAsync = async () => {
-    User.phone = await AsyncStorage.getItem('userPhone');
-    this.props.navigation.navigate(User.phone ? 'App' : 'Auth');
+    User.username = await AsyncStorage.getItem('username');
+    this.props.navigation.navigate(User.username ? 'App' : 'Auth');
   };
 
-  // Render any loading content that you like here
   render() {
     return (
       <View>

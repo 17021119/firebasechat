@@ -38,6 +38,16 @@ const styles = StyleSheet.create({
 		color: 'darkblue',
 		fontSize: 20,
 	},
+	btnChange: {
+		fontSize: 20,
+		color:'white'
+	},
+	btnTouch:{
+		backgroundColor: '#5388d0',
+		padding: 10,
+		borderRadius: 3,
+		margin: 5
+	},
 	bottomBar: {
 		// backgroundColor: '#fff',
 		flexDirection: 'row',
@@ -64,11 +74,11 @@ const styles = StyleSheet.create({
 	friendScreenIcon: {
 		width: 32,
 		height: 32,
-		position:'relative',
+		position: 'relative',
 		marginRight: 10,
 		resizeMode: 'cover',
 		tintColor: '#999',
-		alignSelf: 'center'
+		alignSelf: 'center',
 	},
 	friendScreenText: {
 		fontSize: 20,
@@ -76,11 +86,11 @@ const styles = StyleSheet.create({
 	},
 	boxFriendOptions: {
 		borderWidth: 1,
-		borderColor:'#999',
+		borderColor: '#999',
 		padding: 10,
 	},
 	containerFriendScreen: {
-		marginTop:'45%',
+		marginTop: '45%',
 		flexDirection: 'column',
 		alignItems: 'center',
 		flex: 1,

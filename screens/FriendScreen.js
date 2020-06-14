@@ -19,21 +19,21 @@ export default class HomeScreen extends React.Component {
 		numFriend: 23,
 	};
 
-	componentDidMount() {
-		this.state.dbRef.on('child_added', (val) => {
-			let person = val.val();
-			person.username = val.key;
-			if (person.username === User.username) {
-				User.name = person.name;
-			} else {
-				this.setState((prevState) => {
-					return {
-						users: [...prevState.users, person],
-					};
-				});
-			}
-		});
-	}
+	// componentDidMount() {
+	// 	this.state.dbRef.on('child_added', (val) => {
+	// 		let person = val.val();
+	// 		person.username = val.key;
+	// 		if (person.username === User.username) {
+	// 			User.name = person.name;
+	// 		} else {
+	// 			this.setState((prevState) => {
+	// 				return {
+	// 					users: [...prevState.users, person],
+	// 				};
+	// 			});
+	// 		}
+	// 	});
+	// }
 	componentWillUnmount() {
 		this.state.dbRef.off();
 	}

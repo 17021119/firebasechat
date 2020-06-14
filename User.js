@@ -1,6 +1,6 @@
 const User={
     phone:'null',
-    name: 'null'
+    name: 'null',
 }
 
 export default User;

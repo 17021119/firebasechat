@@ -16,9 +16,10 @@ export default class SignUpScreen extends React.Component {
 		rePassword:'',
 		checkExisted: null,
 		userID: 0,
-		listFriend: '',
-		listBan:'',
-		listRequest:''
+		listFriend: ['user1', 'user2', 'user3'],
+		listBan:['user4'],
+		listRequest:['user5'],
+		avatar: "https://firebasestorage.googleapis.com/v0/b/fir-chat-ffbb9.appspot.com/o/images%2Favatar%2Fdf.png?alt=media&token=c17a4c1b-f661-4e8e-80ed-4edeb56173b2",
 	};
 	handleChange = (key) => (val) => {
 		this.setState({ [key]: val });
@@ -68,8 +69,19 @@ export default class SignUpScreen extends React.Component {
 					listFriend: this.state.listFriend,
 					listBan: this.state.listBan,
 					listRequest: this.state.listRequest,
+					avatar: this.state.avatar,
 				});
-				this.refs.loading.show(false);
+			const response = await fetch(
+				'https://firebasestorage.googleapis.com/v0/b/fir-chat-ffbb9.appspot.com/o/images%2Favatar%2Fdf.png?alt=media&token=c17a4c1b-f661-4e8e-80ed-4edeb56173b2'
+			);
+			const blob = await response.blob();
+
+			var ref = await firebase
+				.storage()
+				.ref()
+				.child('images/avatar/' + this.state.name);
+			ref.put(blob);
+			this.refs.loading.show(false);
 			// console.log(this.state.userID);
 			this.props.navigation.navigate('App');
 		}
