@@ -23,13 +23,10 @@ const AppStack = createStackNavigator({
 	Home: HomeScreen,
 	Chat: ChatScreen,
 	Profile: ProfileScreen,
-});
-
-const ProfileStack = createStackNavigator({
-	Profiles: ProfileScreen,
 	ChangeName: ChangeNameScreen,
 	ChangePassword: ChangePasswordScreen,
 });
+
 const FriendStack = createStackNavigator({
 	Friend: FriendScreen,
 	List: ListScreen,

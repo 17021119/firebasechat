@@ -49,6 +49,7 @@ export default class App extends React.Component {
 			<View style={styles.container}>
 				<TextInput
 					placeholder="Tài khoản"
+					autoFocus={true}
 					style={styles.input}
 					value={this.state.username}
 					onChangeText={this.handleChange('username')}
@@ -61,16 +62,12 @@ export default class App extends React.Component {
 					onChangeText={this.handleChange('password')}
 				/>
 				<TouchableOpacity onPress={this.submitForm}>
-					<Text style={styles.btnText}>Đăng nhập</Text>
+					<Text style={styles.btnChange}>Đăng nhập</Text>
 				</TouchableOpacity>
 				<TouchableOpacity onPress={this.singUp}>
-					<Text style={styles.btnText}>Đăng kí</Text>
+					<Text style={styles.btnText}>Bạn chưa có tài khoản? Đăng kí tại đây</Text>
 				</TouchableOpacity>
-				<Loading
-					ref="loading"
-					backgroundColor="#ffffff"
-					indicatorColor=" #00ffcc"
-				/>
+				<Loading ref="loading" backgroundColor="#ffffff" indicatorColor=" #00ffcc" />
 			</View>
 		);
 	}

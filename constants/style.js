@@ -2,11 +2,77 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+	boxFriendOptions: {
+		borderWidth: 1,
+		borderColor: '#999',
+		padding: 10,
+	},
+	bottomBar: {
+		// backgroundColor: '#fff',
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: 5,
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		right: 0,
+		zIndex: 2,
+		height: 60,
+	},
+	btnChange: {
+		fontSize: 20,
+		color: 'white',
+		backgroundColor: '#5388d0',
+		padding: 10,
+		borderRadius: 3,
+		margin: 5,
+	},
+	btnLogOut: {
+		// size: '40%',
+		fontSize: 20,
+		color: 'white',
+		backgroundColor: '#dc3545',
+		padding: 10,
+		borderRadius: 3,
+		margin: 5,
+	},
+	btnRegister: {
+		fontSize: 20,
+		color: 'white',
+		backgroundColor: '#28a745',
+		padding: 10,
+		borderRadius: 3,
+		margin: 5,
+	},
+	btnText: {
+		color: 'darkblue',
+		fontSize: 20,
+	},
 	container: {
 		flex: 1,
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
+	},
+	containerFriendScreen: {
+		marginTop: '45%',
+		flexDirection: 'column',
+		alignItems: 'center',
+		flex: 1,
+		justifyContent: 'space-between',
+	},
+	friendScreenIcon: {
+		width: 32,
+		height: 32,
+		position: 'relative',
+		marginRight: 10,
+		resizeMode: 'cover',
+		tintColor: '#999',
+		alignSelf: 'center',
+	},
+	friendScreenText: {
+		fontSize: 20,
+		top: 3,
 	},
 	input: {
 		padding: 10,
@@ -15,6 +81,7 @@ const styles = StyleSheet.create({
 		width: '80%',
 		marginBottom: 10,
 		borderRadius: 5,
+		fontSize: 18,
 	},
 	inputMessage: {
 		padding: 10,
@@ -34,32 +101,6 @@ const styles = StyleSheet.create({
 		width: '90%',
 		borderRadius: 40,
 	},
-	btnText: {
-		color: 'darkblue',
-		fontSize: 20,
-	},
-	btnChange: {
-		fontSize: 20,
-		color:'white'
-	},
-	btnTouch:{
-		backgroundColor: '#5388d0',
-		padding: 10,
-		borderRadius: 3,
-		margin: 5
-	},
-	bottomBar: {
-		// backgroundColor: '#fff',
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: 5,
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		right: 0,
-		zIndex: 2,
-		height: 60,
-	},
 	sendButton: {
 		alignItems: 'center',
 		marginBottom: 10,
@@ -70,31 +111,6 @@ const styles = StyleSheet.create({
 		paddingLeft: 5,
 		backgroundColor: '#2196F3',
 		borderRadius: 20,
-	},
-	friendScreenIcon: {
-		width: 32,
-		height: 32,
-		position: 'relative',
-		marginRight: 10,
-		resizeMode: 'cover',
-		tintColor: '#999',
-		alignSelf: 'center',
-	},
-	friendScreenText: {
-		fontSize: 20,
-		top: 3,
-	},
-	boxFriendOptions: {
-		borderWidth: 1,
-		borderColor: '#999',
-		padding: 10,
-	},
-	containerFriendScreen: {
-		marginTop: '45%',
-		flexDirection: 'column',
-		alignItems: 'center',
-		flex: 1,
-		justifyContent: 'space-between',
 	},
 });
 export default styles;

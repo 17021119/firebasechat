@@ -14,39 +14,19 @@ export default class ProfileScreen extends React.Component {
 
 	state = {
 		name: User.name,
+		username: User.username,
 		url: 'https://firebasestorage.googleapis.com/v0/b/fir-chat-ffbb9.appspot.com/o/images%2Favatar%2Fdf.png?alt=media&token=c17a4c1b-f661-4e8e-80ed-4edeb56173b2'
 	};
 	_logOut = async () => {
 		await AsyncStorage.clear();
 		this.props.navigation.navigate('Auth');
 	};
-	// handleChange = (key) => (val) => {
-	// 	this.setState({ [key]: val });
-	// };
-	// changeName = async () => {
-	// 	if (this.state.name.length < 3) {
-	// 		Alert.alert('Lỗi', 'Tên phải từ 2 kí tự trở lên');
-	// 	} else if (User.name != this.state.name) {
-	// 		firebase
-	// 			.database()
-	// 			.ref('users')
-	// 			.child(User.username)
-	// 			.update({ name: this.state.name }, function (error) {
-	// 				if (error) {
-	// 					Alert.alert('Thất bại', 'Thay đổi không thành công');
-	// 				} else {
-	// 					Alert.alert('Thành công', 'Thay đổi thành công');
-	// 				}
-	// 			});
-	// 		User.name = this.state.name;
-	// 	}
-	// };
+	
 	getURL(){
-		var renderImg = firebase.database().ref('users/' + User.username + '/avatar');
+		var renderImg =firebase.database().ref('users/' + User.username + '/avatar');
 		renderImg.once('value', (snapshot) => {
 			this.state.url = snapshot.val();
 		});
-		
 	}
 	componentWillMount() {
 		this.getURL();
@@ -107,22 +87,18 @@ export default class ProfileScreen extends React.Component {
 					style={styles.input}
 					textAlign={'center'}
 				/> */}
-				<TouchableOpacity style={styles.btnTouch} onPress={() => this.props.navigation.navigate('ChangeName')}>
+				<TouchableOpacity 
+					onPress={() => this.props.navigation.navigate('ChangeName')}>
 					<Text style={styles.btnChange}>Đổi tên</Text>
 				</TouchableOpacity>
+
 				<TouchableOpacity
-					style={styles.btnTouch}
-					onPress={() => this.props.navigation.navigate('ChangePassword')}
-				>
+					onPress={() => this.props.navigation.navigate('ChangePassword')}>
 					<Text style={styles.btnChange}>Đổi mật khẩu</Text>
 				</TouchableOpacity>
-				{/* <TouchableOpacity>
-					<Text onPress={this.changeName} style={styles.btnText}>
-						Lưu
-					</Text>
-				</TouchableOpacity> */}
+				
 				<TouchableOpacity>
-					<Text onPress={this._logOut} style={styles.btnText}>
+					<Text onPress={this._logOut} style={styles.btnLogOut}>
 						Đăng xuất
 					</Text>
 				</TouchableOpacity>
