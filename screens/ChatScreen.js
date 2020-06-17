@@ -16,6 +16,7 @@ import User from '../User';
 import firebase from 'firebase';
 import { FlatList } from 'react-native-gesture-handler';
 
+
 const isIOS = Platform.OS === 'ios';
 
 export default class ChatScreen extends React.Component {

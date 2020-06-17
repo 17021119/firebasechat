@@ -1,9 +1,11 @@
 import React from 'react';
-import { Alert, AsyncStorage, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Alert, AsyncStorage,Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 import User from '../User';
 import styles from '../constants/style';
 import Loading from 'react-native-whc-loading';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Input } from 'react-native-elements';
 
 export default class App extends React.Component {
 	static navigationOptions = {
@@ -47,6 +49,10 @@ export default class App extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
+			<Image
+				source= {require('../images/logo.png')}
+				style={{width: 160, height: 160, marginBottom: 30, opacity:0.8, marginTop: -100}}
+			/>
 				<TextInput
 					placeholder="Tài khoản"
 					autoFocus={true}
