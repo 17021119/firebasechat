@@ -4,6 +4,7 @@ import styles from '../../constants/style';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from 'firebase';
 import User from '../../User'
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default class ChangeNameScreen extends React.Component {
 	static navigationOptions = ({ navigation, route }) => {
@@ -41,13 +42,16 @@ export default class ChangeNameScreen extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<TextInput
-					value={this.state.name}
-					onChangeText={this.handleChange('name')}
-					style={styles.input}
-					autoFocus={true}
-					textAlign={'center'}
-				/>
+				<View style={{ width: '80%', alignItems: 'center' }}>
+					<Icon name="user-alt" style={styles.iconLeft} size={26} />
+					<TextInput
+						value={this.state.name}
+						onChangeText={this.handleChange('name')}
+						style={styles.input}
+						autoFocus={true}
+						// textAlign={'center'}
+					/>
+				</View>
 				<TouchableOpacity>
 					<Text style={styles.btnChange} onPress={this.changeName}>
 						Lưu

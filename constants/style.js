@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const {width: WIDTH } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
 	boxFriendOptions: {
@@ -18,6 +20,17 @@ const styles = StyleSheet.create({
 		right: 0,
 		zIndex: 2,
 		height: 60,
+	},
+	btnLogIn: {
+		fontSize: 20,
+		color: 'white',
+		backgroundColor: '#5388d0',
+		padding: 10,
+		paddingLeft: 40,
+		paddingRight: 40,
+		width: '80%',
+		borderRadius: 100,
+		margin: 5,
 	},
 	btnChange: {
 		fontSize: 20,
@@ -41,12 +54,15 @@ const styles = StyleSheet.create({
 		color: 'white',
 		backgroundColor: '#28a745',
 		padding: 10,
-		borderRadius: 3,
+		borderRadius: 100,
 		margin: 5,
+		paddingLeft: 40,
+		paddingRight: 40,
 	},
 	btnText: {
 		color: 'darkblue',
-		fontSize: 20,
+		fontSize: 17,
+		marginTop: 50
 	},
 	container: {
 		flex: 1,
@@ -74,14 +90,27 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		top: 3,
 	},
+	iconLeft: {
+		position: 'absolute',
+		left: 15,
+		top: 11,
+		color: '#808080',
+	},
+	iconRight: {
+		position: 'absolute',
+		right: 15,
+		top: 10,
+		color: '#808080',
+	},
 	input: {
 		padding: 10,
 		borderWidth: 1,
 		borderColor: '#ccc',
-		width: '80%',
+		width: '100%',
 		marginBottom: 10,
-		borderRadius: 5,
-		fontSize: 18,
+		borderRadius: 100,
+		fontSize: 17,
+		paddingLeft: 50,
 	},
 	inputMessage: {
 		padding: 10,
@@ -111,6 +140,17 @@ const styles = StyleSheet.create({
 		paddingLeft: 5,
 		backgroundColor: '#2196F3',
 		borderRadius: 20,
+	},
+	inputContainer: {
+		borderBottomColor: '#F5FCFF',
+		backgroundColor: '#FFFFFF',
+		borderRadius: 30,
+		borderBottomWidth: 1,
+		width: 250,
+		height: 45,
+		marginBottom: 20,
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 });
 export default styles;

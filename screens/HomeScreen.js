@@ -22,7 +22,7 @@ export default class HomeScreen extends React.Component {
 		};
     };
 
-	state = {
+	state = {	
 		users: [],
 		dbRef: firebase.database().ref('users'),
 		url: "https://firebasestorage.googleapis.com/v0/b/fir-chat-ffbb9.appspot.com/o/images%2Favatar%2Fdf.png?alt=media&token=c17a4c1b-f661-4e8e-80ed-4edeb56173b2"

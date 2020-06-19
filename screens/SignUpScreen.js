@@ -1,8 +1,9 @@
 import React from 'react';
-import { Alert, AsyncStorage, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Alert, AsyncStorage, Text, TextInput ,View, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 import User from '../User';
 import styles from '../constants/style';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import Loading from 'react-native-whc-loading';
 
 export default class SignUpScreen extends React.Component {
@@ -16,6 +17,10 @@ export default class SignUpScreen extends React.Component {
 		rePassword: '',
 		checkExisted: null,
 		userID: 0,
+		secure: true,
+		iconName: "eye", 
+		secure1: true,
+		iconName1: "eye", 
 		listFriend: ['user1', 'user2', 'user3'],
 		listBan: ['user4'],
 		listRequest: ['user5'],
@@ -89,36 +94,64 @@ export default class SignUpScreen extends React.Component {
 	goToLogin = () => {
 		this.props.navigation.navigate('Auth');
 	};
+	showPass = () =>{
+		let iconName = (this.state.secure) ? 'eye-slash' : 'eye';
+		this.setState({
+			secure: !this.state.secure,
+			iconName: iconName,
+		});
+	}
+	showPass1 = () =>{
+		let iconName = (this.state.secure1) ? 'eye-slash' : 'eye';
+		this.setState({
+			secure1: !this.state.secure1,
+			iconName1: iconName,
+		});
+	}
 	render() {
 		return (
 			<View style={styles.container}>
-				<TextInput
-					placeholder="Tài khoản"
-					autoFocus={true}
-					style={styles.input}
-					value={this.state.username}
-					onChangeText={this.handleChange('username')}
-				/>
-				<TextInput
-					placeholder="Tên hiển thị"
-					style={styles.input}
-					value={this.state.name}
-					onChangeText={this.handleChange('name')}
-				/>
-				<TextInput
-					placeholder="Mật khẩu"
-					style={styles.input}
-					secureTextEntry={true}
-					value={this.state.password}
-					onChangeText={this.handleChange('password')}
-				/>
-				<TextInput
-					placeholder="Nhập lại mật khẩu"
-					style={styles.input}
-					secureTextEntry={true}
-					value={this.state.rePassword}
-					onChangeText={this.handleChange('rePassword')}
-				/>
+				<View style={{ width: '80%', alignItems: 'center' }}>
+					<Icon name="user-alt" style={styles.iconLeft} size={26} />
+					<TextInput
+						placeholder="Tài khoản"
+						autoFocus={true}
+						style={styles.input}
+						value={this.state.username}
+						onChangeText={this.handleChange('username')}
+					/>
+				</View>
+				<View style={{ width: '80%', alignItems: 'center' }}>
+					<Icon name="user-alt" style={styles.iconLeft} size={26} />
+					<TextInput
+						placeholder="Tên hiển thị"
+						style={styles.input}
+						value={this.state.name}
+						onChangeText={this.handleChange('name')}
+					/>
+				</View>
+				<View style={{ width: '80%', alignItems: 'center' }}>
+					<TextInput
+						placeholder="Mật khẩu"
+						style={styles.input}
+						secureTextEntry={this.state.secure}
+						value={this.state.password}
+						onChangeText={this.handleChange('password')}
+					/>
+					<Icon name="key" style={styles.iconLeft} size={26} />
+					<Icon name={this.state.iconName} style={styles.iconRight} size={26} onPress={this.showPass} />
+				</View>
+				<View style={{ width: '80%', alignItems: 'center' }}>
+					<TextInput
+						placeholder="Nhập lại mật khẩu"
+						style={styles.input}
+						secureTextEntry={this.state.secure1}
+						value={this.state.rePassword}
+						onChangeText={this.handleChange('rePassword')}
+					/>
+					<Icon name="key" style={styles.iconLeft} size={26} />
+					<Icon name={this.state.iconName1} style={styles.iconRight} size={26} onPress={this.showPass1} />
+				</View>
 				<TouchableOpacity onPress={this.submitForm}>
 					<Text style={styles.btnRegister}>Đăng kí</Text>
 				</TouchableOpacity>
