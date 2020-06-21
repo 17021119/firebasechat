@@ -1,13 +1,9 @@
 import React from 'react';
-import { SafeAreaView, Dimensions, Image, Text, FlatList, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Dimensions, Image, Text, Alert, FlatList, TouchableOpacity } from 'react-native';
 import User from '../User';
 import firebase from 'firebase';
 import { Avatar } from 'react-native-elements';
 import { ListItem } from 'react-native-elements';
-// import { TextInput } from 'react-native-gesture-handler';
-// import styles from '../constants/style';
-
-import ChatScreen from './ChatScreen'
 
 export default class HomeScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => {
@@ -27,76 +23,43 @@ export default class HomeScreen extends React.Component {
 	state = {
 		users: [],
 		dbRef: firebase.database().ref('users'),
-		messageList: [],
 		dbRefMess: firebase.database().ref('messages'),
-		messageLast: []
+		messageLast: [],
 	};
-	componentDidMount() {
-		this.state.dbRef.on('child_added', (val) => {
-			let person = val.val();	
+	getListMessLast= async() =>{
+		await this.state.dbRef.on('child_added', (val) => {
+			let person = val.val();
 			person.username = val.key;
-			if (person.username === User.username) {
-				User.name = person.name;
-			} else {
-				this.setState((prevState) => {
-					this.state.dbRefMess
-						.child(User.username)
-						.child(person.username)
-						.limitToLast(1)
-						.once('value', (snapshot) => {
+			if (person.username != User.username) {
+				this.state.dbRefMess
+					.child(User.username)
+					.child(person.username)
+					.limitToLast(1)
+					.on('value', (snapshot) => {
+						try {
 							var key = Object.keys(snapshot.val())[0];
 							this.state.dbRefMess
 								.child(User.username)
 								.child(person.username)
 								.child(key)
-								.once('value', (snap) => {
-									// console.log(snap.val().from);
-									// console.log(snap.val().message);
-									// console.log(snap.val().time);
-
-									var mess = [
-										person.username,
-										// snap.val().from,
-										snap.val().message,
-										// snap.val().time,
-									]
-									// var mess = snap.val().message;
+								.on('value', (snap) => {
+									var mess = [person.username, snap.val().from, snap.val().message, snap.val().time];
 									this.state.messageLast.push(mess);
-									// console.log(this.state.messageLast)
-									// const result = this.state.messageLast.filter((word) => word[0] =="user8");
-									// result_final = result[0];
-									// console.log(result[0][2]);
-									var result = this.state.messageLast.find((MESSS) => MESSS[0] == 'user8');
-									console.log(result);
-									// console.log(this.state.messageLast.find((MESS) => MESS[0] == 'user8')[1]);
-									// console.log(this.state.messageLast);
-									
-
-									
-									// this.state.messageLast.push({
-									// 	[person.username]: [
-									// 		snap.val().from,
-									// 		snap.val().message,
-									// 		snap.val().time,
-									// 	]
-									// })
-
-									// this.state.messageLast.push(snap.val().message);
-
-									// this.state.messageLast.push(
-									// 	[
-									// 		person.userID,
-									// 		snap.val().from,
-									// 		snap.val().message,
-									// 		snap.val().time,
-									// 	]
-									// );
-
 								});
-								// console.log(this.state.messageLast);
-								// console.log(this.state.messageLast['user1']);
-								
-						});	
+						} catch (error) {}
+					});
+			}
+		});
+	}
+	componentWillMount() {
+		this.getListMessLast();
+		this.state.dbRef.on('child_added', (val) => {
+			let person = val.val();
+			person.username = val.key;
+			if (person.username === User.username) {
+				User.name = person.name;
+			} else {
+				this.setState((prevState) => {
 					return {
 						users: [...prevState.users, person],
 					};
@@ -104,26 +67,79 @@ export default class HomeScreen extends React.Component {
 			}
 		});
 	}
+	// componentDidMount(){
+	// 	this.state.dbRef.on('child_added', (val) => {
+	// 		let person = val.val();
+	// 		person.username = val.key;
+	// 		if (person.username === User.username) {
+	// 			User.name = person.name;
+	// 		} else {
+	// 			this.setState((prevState) => {
+	// 				return {
+	// 					users: [...prevState.users, person],
+	// 				};
+	// 			});
+	// 		}
+	// 	});
+	// }
 	componentWillUnmount() {
 		this.state.dbRef.off();
 	}
-	renderItem = ({ item }) => (
+	convertTime = (time) => {
+		var d = new Date(time);
+		var c = new Date();
+		var hours = d.getHours();
+		var minutes = '0' + d.getMinutes();
+		var formattedTime = ('0' + hours).substr(-2) + ':' + minutes.substr(-2);
+		if (d.getDate() != c.getDate()) {
+			formattedTime = ('0' + (d.getDate())).substr(-2) + '/' + ('0' + (d.getMonth()+1)).substr(-2);
+		}
+		return formattedTime;
+	};
+	convertMess = (from, mess, time) => {
+		var FM_real = from + ':' + mess;
+		var FM = from + ': ' + mess + '                                      ';
+		var res;
+		if(FM_real.length> 29){
+			res = FM.substring(0, 27)+ "...";
+		}else{
+			res = FM.substring(0, 30);
+		}
+		// console.log(res);
 		
+		
+		return res + ' ∙ ' + time;
+	};
+	getMess = (item) => {
+		var result, time, from, mess;
+		try {
+			result = this.state.messageLast.find((MESS) => MESS[0] == item.username);
+			// console.log(result)
+			from = result[1] == item.username ? item.name : 'Bạn';
+			mess = result[2];
+			time = this.convertTime(result[3]);
+
+			// result = from + ': ' + mess+ ": "+ time;
+			result = this.convertMess(from, mess, time);
+		} catch (error) {
+			result = 'Các bạn đã được kết nối với nhau.';
+		}
+		return result;
+	};
+	renderItem = ({ item }) => (
 		<TouchableOpacity
-				onPress={() => this.props.navigation.navigate('Chat', item)}
-				style={{borderBottomColor: '#ccc'}}
-			>
+			onPress={() => this.props.navigation.navigate('Chat', item)}
+			style={{ borderBottomColor: '#ccc' }}
+		>
 			<ListItem
 				title={item.name}
-				// subtitle={this.getMessageLast(item.username)}
-				// subtitle={this.state.messageLast.find((MESS) => MESS[0] == item.username)[1]}
-				subtitle={item.username}
+				subtitle={this.getMess(item)}
 				leftAvatar={{ source: { uri: item.avatar } }}
 				bottomDivider
 				chevron
 			/>
 		</TouchableOpacity>
-	)
+	);
 	_logOut = async () => {
 		await AsyncStorage.clear();
 		this.props.navigation.navigate('Auth');
@@ -132,12 +148,7 @@ export default class HomeScreen extends React.Component {
 		const { height } = Dimensions.get('window');
 		return (
 			<SafeAreaView>
-				<FlatList
-					data={this.state.users}
-					renderItem={this.renderItem}
-					keyExtractor={(item) => item.username}
-				/>
-				
+				<FlatList data={this.state.users} renderItem={this.renderItem} keyExtractor={(item) => item.username} />
 			</SafeAreaView>
 		);
 	}

@@ -87,8 +87,8 @@ export default class ChatScreen extends React.Component {
 		var hours = d.getHours();
 		var minutes = '0' + d.getMinutes();
 		var formattedTime = hours + ':' + minutes.substr(-2);
-		if (d.getDay() != c.getDay()) {
-			formattedTime = d.getDay() + ' tháng ' + d.getMonth() + ' lúc ' + formattedTime;
+		if (d.getDate() != c.getDate()) {
+			formattedTime = (d.getDate()) + ' tháng ' + (d.getMonth()+1) + ' lúc ' + formattedTime;
 		}
 		return formattedTime;
 	};
