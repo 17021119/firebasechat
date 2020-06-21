@@ -29,16 +29,74 @@ export default class HomeScreen extends React.Component {
 		dbRef: firebase.database().ref('users'),
 		messageList: [],
 		dbRefMess: firebase.database().ref('messages'),
+		messageLast: []
 	};
 	componentDidMount() {
 		this.state.dbRef.on('child_added', (val) => {
-			let person = val.val();
+			let person = val.val();	
 			person.username = val.key;
-			var lists;
 			if (person.username === User.username) {
 				User.name = person.name;
 			} else {
 				this.setState((prevState) => {
+					this.state.dbRefMess
+						.child(User.username)
+						.child(person.username)
+						.limitToLast(1)
+						.once('value', (snapshot) => {
+							var key = Object.keys(snapshot.val())[0];
+							this.state.dbRefMess
+								.child(User.username)
+								.child(person.username)
+								.child(key)
+								.once('value', (snap) => {
+									// console.log(snap.val().from);
+									// console.log(snap.val().message);
+									// console.log(snap.val().time);
+
+									var mess = [
+										person.username,
+										// snap.val().from,
+										snap.val().message,
+										// snap.val().time,
+									]
+									// var mess = snap.val().message;
+									this.state.messageLast.push(mess);
+									// console.log(this.state.messageLast)
+									// const result = this.state.messageLast.filter((word) => word[0] =="user8");
+									// result_final = result[0];
+									// console.log(result[0][2]);
+									var result = this.state.messageLast.find((MESSS) => MESSS[0] == 'user8');
+									console.log(result);
+									// console.log(this.state.messageLast.find((MESS) => MESS[0] == 'user8')[1]);
+									// console.log(this.state.messageLast);
+									
+
+									
+									// this.state.messageLast.push({
+									// 	[person.username]: [
+									// 		snap.val().from,
+									// 		snap.val().message,
+									// 		snap.val().time,
+									// 	]
+									// })
+
+									// this.state.messageLast.push(snap.val().message);
+
+									// this.state.messageLast.push(
+									// 	[
+									// 		person.userID,
+									// 		snap.val().from,
+									// 		snap.val().message,
+									// 		snap.val().time,
+									// 	]
+									// );
+
+								});
+								// console.log(this.state.messageLast);
+								// console.log(this.state.messageLast['user1']);
+								
+						});	
 					return {
 						users: [...prevState.users, person],
 					};
@@ -46,28 +104,11 @@ export default class HomeScreen extends React.Component {
 			}
 		});
 	}
-	// getMessageLast = (user2)=>{
-	// 	this.state.dbRefMess
-	// 		.child(User.username)
-	// 		// .child(user2)
-	// 		.on('child_added', (value) => {
-	// 			this.setState((prevState) => {
-	// 				return {
-	// 					messageList: [...prevState.messageList, value.val()],
-	// 				};
-	// 			});
-	// 		});
-	// 	console.log(user2);
-	// 	console.log(this.state.messageList);
-		
-	// 	// return this.state.messageList[this.state.messageList.length- 1];
-	// 	// return this.state.messageList.length;
-	// 	return this.state.messageList.length;
-	// }
 	componentWillUnmount() {
 		this.state.dbRef.off();
 	}
 	renderItem = ({ item }) => (
+		
 		<TouchableOpacity
 				onPress={() => this.props.navigation.navigate('Chat', item)}
 				style={{borderBottomColor: '#ccc'}}
@@ -75,6 +116,7 @@ export default class HomeScreen extends React.Component {
 			<ListItem
 				title={item.name}
 				// subtitle={this.getMessageLast(item.username)}
+				// subtitle={this.state.messageLast.find((MESS) => MESS[0] == item.username)[1]}
 				subtitle={item.username}
 				leftAvatar={{ source: { uri: item.avatar } }}
 				bottomDivider
@@ -94,59 +136,9 @@ export default class HomeScreen extends React.Component {
 					data={this.state.users}
 					renderItem={this.renderItem}
 					keyExtractor={(item) => item.username}
-					// leftAvatar={{source :{ uri: item.avatar  } }}
 				/>
+				
 			</SafeAreaView>
 		);
 	}
 }
-
-// import { Avatar, ListItem } from 'react-native-elements';
-// import React from 'react';
-// import { SafeAreaView, Dimensions, Image, Text, FlatList, TouchableOpacity } from 'react-native';
-
-// // Standard Avatar
-// export default class HomeScreen extends React.Component {
-// 	state={
-// 		users:['user1','user2', 'user3', 'user4']
-// 	}
-// 	render() {
-// 		return (
-// 			<SafeAreaView>
-// 				{/* <Avatar
-// 					rounded
-// 					size="medium"
-// 					showAccessory
-// 					onPress={() => console.log('Works!')}
-// 					activeOpacity={0.7}
-// 					title="Tự"
-// 					icon={{ name: 'user', type: 'font-awesome' }}
-// 					// containerStyle={{ flex: 2, marginLeft: 20, marginTop: 115 }}
-// 					source={{
-// 						uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-// 					}}
-// 				/> */}
-// 				<ListItem
-// 					leftAvatar={{
-// 						title:'test',
-// 						source: { uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' },
-// 						showAccessory: true,
-// 					}}
-// 					title={[...this.state.users]}
-// 					subtitle={'true'}
-// 					chevron
-// 				/>
-// 				<ListItem
-// 					leftAvatar={{
-// 						title: 'Tự',
-// 						source: { uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' },
-// 						// showAccessory: true,
-// 					}}
-// 					title={'test'}
-// 					subtitle={'true'}
-// 					chevron
-// 				/>
-// 			</SafeAreaView>
-// 		);
-// 	}
-// }
