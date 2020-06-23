@@ -2,7 +2,6 @@ import React from 'react';
 import { SafeAreaView, Dimensions, Image, Text, Alert, FlatList, TouchableOpacity } from 'react-native';
 import User from '../User';
 import firebase from 'firebase';
-import { Avatar } from 'react-native-elements';
 import { ListItem } from 'react-native-elements';
 
 export default class HomeScreen extends React.Component {
@@ -34,10 +33,9 @@ export default class HomeScreen extends React.Component {
 				this.state.dbRefMess
 					.child(User.username)
 					.child(person.username)
-					.limitToLast(1)
 					.on('value', (snapshot) => {
 						try {
-							var key = Object.keys(snapshot.val())[0];
+							var key =Object.keys(snapshot.val())[snapshot.numChildren()-1];
 							this.state.dbRefMess
 								.child(User.username)
 								.child(person.username)
@@ -51,8 +49,7 @@ export default class HomeScreen extends React.Component {
 			}
 		});
 	}
-	componentWillMount() {
-		this.getListMessLast();
+	getUSer=()=>{
 		this.state.dbRef.on('child_added', (val) => {
 			let person = val.val();
 			person.username = val.key;
@@ -67,21 +64,11 @@ export default class HomeScreen extends React.Component {
 			}
 		});
 	}
-	// componentDidMount(){
-	// 	this.state.dbRef.on('child_added', (val) => {
-	// 		let person = val.val();
-	// 		person.username = val.key;
-	// 		if (person.username === User.username) {
-	// 			User.name = person.name;
-	// 		} else {
-	// 			this.setState((prevState) => {
-	// 				return {
-	// 					users: [...prevState.users, person],
-	// 				};
-	// 			});
-	// 		}
-	// 	});
-	// }
+	componentWillMount() {
+		this.getListMessLast();
+		this.getUSer();
+	}
+
 	componentWillUnmount() {
 		this.state.dbRef.off();
 	}
@@ -105,24 +92,18 @@ export default class HomeScreen extends React.Component {
 		}else{
 			res = FM.substring(0, 30);
 		}
-		// console.log(res);
-		
-		
 		return res + ' ∙ ' + time;
 	};
 	getMess = (item) => {
 		var result, time, from, mess;
 		try {
 			result = this.state.messageLast.find((MESS) => MESS[0] == item.username);
-			// console.log(result)
 			from = result[1] == item.username ? item.name : 'Bạn';
 			mess = result[2];
 			time = this.convertTime(result[3]);
-
-			// result = from + ': ' + mess+ ": "+ time;
 			result = this.convertMess(from, mess, time);
 		} catch (error) {
-			result = 'Các bạn đã được kết nối với nhau.';
+			result = 'Các bạn đã được kết nối với nhau!';
 		}
 		return result;
 	};
