@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 	},
 	bottomBar: {
-		// backgroundColor: '#fff',
+
 		flexDirection: 'row',
 		alignItems: 'center',
 		padding: 5,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
 	btnText: {
 		color: 'darkblue',
 		fontSize: 17,
-		marginTop: 50
+		marginTop: 50,
 	},
 	container: {
 		flex: 1,
@@ -102,6 +102,13 @@ const styles = StyleSheet.create({
 		top: 10,
 		color: '#808080',
 	},
+	iconInputText: {
+		height: 30,
+		width: 30,
+		tintColor: '#222',
+		marginRight: 5,
+		marginBottom: 6,
+	},
 	input: {
 		padding: 10,
 		borderWidth: 1,
@@ -116,7 +123,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 		borderWidth: 1,
 		borderColor: '#ccc',
-		width: '80%',
+		width: '60%',
 		marginBottom: 10,
 		borderRadius: 20,
 	},

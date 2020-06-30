@@ -1,6 +1,5 @@
 import React from 'react';
-import {Image} from 'react-native';
-import { YellowBox } from 'react-native';
+import {Image, View, Text} from 'react-native';
 import { createSwitchNavigator, createAppContainer} from 'react-navigation';
 import { createStackNavigator  } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -54,12 +53,36 @@ const TabNavigator = createBottomTabNavigator(
 	{
 		defaultNavigationOptions: ({ navigation }) => ({
 			tabBarIcon: ({ focused, horizontalm, tintColor }) => {
+				var badgeCount=1;
 				const { routeName } = navigation.state;
 				let imageName = require('./images/chats.png');
 				if (routeName === 'Friends') {
 					imageName = require('./images/friends.png');
+					badgeCount = 88;
 				}
-				return <Image source={imageName} style={{ width: 25, resizeMode: 'contain', tintColor }} />;
+				return (
+					<View>
+						<Image source={imageName} style={{ width: 25, resizeMode: 'contain', tintColor }} />
+						{badgeCount > 0 && (
+							<View
+								style={{
+									// On React Native < 0.57 overflow outside of parent will not work on Android, see https://git.io/fhLJ8
+									position: 'absolute',
+									right: -6,
+									top: 20,
+									backgroundColor: 'red',
+									borderRadius: 6,
+									width: 14,
+									height: 14,
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>{badgeCount<10? badgeCount: '9+' }</Text>
+							</View>
+						)}
+					</View>
+				);
 			},
 		}),
 		tabBarOptions: {

@@ -37,7 +37,7 @@ export default class ProfileScreen extends React.Component {
 		// console.log(result.uri)
 
 		if (!result.cancelled) {
-			this.uploadImage(result.uri, this.state.name)
+			this.uploadImage(result.uri, this.state.username)
 				.then(() => {
 					this.props.navigation.navigate('Home');
 					this.props.navigation.navigate('Profile');

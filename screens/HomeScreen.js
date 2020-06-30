@@ -41,7 +41,7 @@ export default class HomeScreen extends React.Component {
 								.child(person.username)
 								.child(key)
 								.on('value', (snap) => {
-									var mess = [person.username, snap.val().from, snap.val().message, snap.val().time];
+									var mess = [person.username, snap.val().from, snap.val().message, snap.val().time, snap.val().type];
 									this.state.messageLast.push(mess);
 								});
 						} catch (error) {}
@@ -99,9 +99,15 @@ export default class HomeScreen extends React.Component {
 		try {
 			result = this.state.messageLast.find((MESS) => MESS[0] == item.username);
 			from = result[1] == item.username ? item.name : 'Bạn';
-			mess = result[2];
-			time = this.convertTime(result[3]);
-			result = this.convertMess(from, mess, time);
+			if(result[4]=='image'){
+				result = from + ' đã gủi một ảnh ∙ ' + this.convertTime(result[3]);
+			}
+			else if(result[4]=='text'){
+				mess = result[2];
+				time = this.convertTime(result[3]);
+				result = this.convertMess(from, mess, time);
+			}
+
 		} catch (error) {
 			result = 'Các bạn đã được kết nối với nhau!';
 		}

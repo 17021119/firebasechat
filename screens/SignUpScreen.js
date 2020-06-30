@@ -21,9 +21,9 @@ export default class SignUpScreen extends React.Component {
 		iconName: "eye", 
 		secure1: true,
 		iconName1: "eye", 
-		listFriend: ['user1', 'user2', 'user3'],
-		listBan: ['user4'],
-		listRequest: ['user5'],
+		listFriend: [],
+		listBan: [],
+		listRequest: [],
 		avatar:
 			'https://firebasestorage.googleapis.com/v0/b/fir-chat-ffbb9.appspot.com/o/images%2Favatar%2Fdf.png?alt=media&token=c17a4c1b-f661-4e8e-80ed-4edeb56173b2',
 	};
@@ -83,7 +83,7 @@ export default class SignUpScreen extends React.Component {
 				var ref = await firebase
 					.storage()
 					.ref()
-					.child('images/avatar/' + this.state.name);
+					.child('images/avatar/' + this.state.username);
 				ref.put(blob);
 				this.refs.loading.show(false);
 				// console.log(this.state.userID);
