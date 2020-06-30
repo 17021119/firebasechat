@@ -12,6 +12,7 @@ import {
 	Image,
 	Alert,
 	View,
+	Linking,
 } from 'react-native';
 import styles from '../constants/style';
 import User from '../User';
@@ -20,6 +21,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { FlatList } from 'react-native-gesture-handler';
 import Images from 'react-native-chat-images';
 import Loading from 'react-native-whc-loading';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
+// import RNLocation from 'react-native-location';
+import Hyperlink from 'react-native-hyperlink';
 
 const isIOS = Platform.OS === 'ios';
 
@@ -39,6 +44,10 @@ export default class ChatScreen extends React.Component {
 			textMessage: '',
 			messageList: [],
 			dbRef: firebase.database().ref('messages'),
+			latitude: null,
+			longitude: null,
+			error: null,
+			location: {},
 		};
 		this.keyboardHeight = new Animated.Value(0);
 		this.bottomPadding = new Animated.Value(80);
@@ -105,7 +114,7 @@ export default class ChatScreen extends React.Component {
 				message: this.state.textMessage,
 				time: firebase.database.ServerValue.TIMESTAMP,
 				from: User.username,
-				type: 'text'
+				type: 'text',
 			};
 			updates[User.username + '/' + this.state.person.username + '/' + msgId] = message;
 			updates[this.state.person.username + '/' + User.username + '/' + msgId] = message;
@@ -126,11 +135,11 @@ export default class ChatScreen extends React.Component {
 		var ref = await firebase
 			.storage()
 			.ref()
-			.child('images/message/'+name);
+			.child('images/message/' + name);
 		await ref.put(blob);
-		await ref.getDownloadURL().then(function(url){
-			linkImg=url;
-		})
+		await ref.getDownloadURL().then(function (url) {
+			linkImg = url;
+		});
 		let msgId = (await this.state.dbRef.child(User.username).child(this.state.person.username).push()).key;
 		let updates = {};
 		let message = {
@@ -147,11 +156,36 @@ export default class ChatScreen extends React.Component {
 	getImage = () => {
 		this.onChooseImagePress();
 	};
-	getMap = () => {
-		Alert.alert('getMap');
+	getMap = async () => {
+		const { status } = await Permissions.askAsync(Permissions.LOCATION);
+		this.refs.loading.show();
+		if (status !== 'granted') {
+			console.log('Permission not granted');
+			this.setState({
+				error: 'Permission not granted',
+			});
+		}
+		const userLocation = await Location.getCurrentPositionAsync();
+		this.setState({
+			longitude: userLocation.coords.longitude,
+			latitude: userLocation.coords.latitude,
+		});
+		let msgId = (await this.state.dbRef.child(User.username).child(this.state.person.username).push()).key;
+		let updates = {};
+		let message = {
+			message: 'https://www.google.com/maps/place/' + this.state.latitude + ',' + this.state.longitude,
+			time: firebase.database.ServerValue.TIMESTAMP,
+			from: User.username,
+			type: 'link',
+		};
+		updates[User.username + '/' + this.state.person.username + '/' + msgId] = message;
+		updates[this.state.person.username + '/' + User.username + '/' + msgId] = message;
+		this.state.dbRef.update(updates);
+		this.refs.loading.show(false);
+		console.log('https://www.google.com/maps/place/' + this.state.latitude + ',' + this.state.longitude);
 	};
-	renderMess = (item) =>{
-		if(item.type=='text'){
+	renderMess = (item) => {
+		if (item.type == 'text') {
 			return (
 				<Text
 					style={{
@@ -159,14 +193,13 @@ export default class ChatScreen extends React.Component {
 						padding: 7,
 						paddingBottom: 17,
 						fontSize: 16,
-						minWidth: '15%'
+						minWidth: '15%',
 					}}
 				>
 					{item.message}
 				</Text>
 			);
-		}
-		else if(item.type=='image'){
+		} else if (item.type == 'image') {
 			return (
 				<View style={{ flex: 1 }}>
 					<Images
@@ -176,8 +209,27 @@ export default class ChatScreen extends React.Component {
 					/>
 				</View>
 			);
+		} else if (item.type == 'link') {
+			return (
+				<Hyperlink
+					onPress={(url, text) => Linking.openURL(url)}
+					linkStyle={{ textDecorationLine: 'underline' }}
+				>
+					<Text
+						style={{
+							color: item.from === User.username ? '#fff' : '#000000',
+							padding: 7,
+							paddingBottom: 17,
+							fontSize: 16,
+							minWidth: '15%',
+						}}
+					>
+						Vị trí của tôi: {'\n'+item.message}
+					</Text>
+				</Hyperlink>
+			);
 		}
-	}
+	};
 	renderRow = ({ item }) => {
 		return (
 			<SafeAreaView

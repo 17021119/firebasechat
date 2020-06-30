@@ -95,19 +95,19 @@ export default class HomeScreen extends React.Component {
 		return res + ' ∙ ' + time;
 	};
 	getMess = (item) => {
-		var result, time, from, mess;
+		var result, time, from, mess, arr;
 		try {
-			result = this.state.messageLast.find((MESS) => MESS[0] == item.username);
-			from = result[1] == item.username ? item.name : 'Bạn';
-			if(result[4]=='image'){
-				result = from + ' đã gủi một ảnh ∙ ' + this.convertTime(result[3]);
-			}
-			else if(result[4]=='text'){
-				mess = result[2];
-				time = this.convertTime(result[3]);
+			arr = this.state.messageLast.find((MESS) => MESS[0] == item.username);
+			from = arr[1] == item.username ? item.name : 'Bạn';
+			time= this.convertTime(arr[3]);
+			if (arr[4] == 'image') {
+				result = from + ' đã gủi một ảnh ∙ ' + time;
+			} else if (arr[4] == 'text') {
+				mess = arr[2];
 				result = this.convertMess(from, mess, time);
+			} else if (arr[4] == 'link') {
+				result = from + ' đã gủi một liên kết ∙ ' + time;
 			}
-
 		} catch (error) {
 			result = 'Các bạn đã được kết nối với nhau!';
 		}
