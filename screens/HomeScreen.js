@@ -1,73 +1,93 @@
-import React from 'react';
-import { SafeAreaView, Dimensions, Image, Text, Alert, FlatList, TouchableOpacity } from 'react-native';
-import User from '../User';
-import firebase from 'firebase';
-import { ListItem } from 'react-native-elements';
+import React from "react";
+import {
+  SafeAreaView,
+  Dimensions,
+  Image,
+  Text,
+  Alert,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import User from "../User";
+import firebase from "firebase";
+import { ListItem } from "react-native-elements";
 
 export default class HomeScreen extends React.Component {
-	static navigationOptions = ({ navigation }) => {
-		return {
-			title: 'Chats',
-			headerRight: (
-				<TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-					<Image
-						style={{ width: 32, height: 32, marginRight: 10, resizeMode: 'cover', tintColor: '#999' }}
-						source={require('../images/user.png')}
-					/>
-				</TouchableOpacity>
-			),
-		};
-	};
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Chats",
+      headerRight: (
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          <Image
+            style={{
+              width: 32,
+              height: 32,
+              marginRight: 10,
+              resizeMode: "cover",
+              tintColor: "#999",
+            }}
+            source={require("../images/user.png")}
+          />
+        </TouchableOpacity>
+      ),
+    };
+  };
 
-	state = {
-		users: [],
-		dbRef: firebase.database().ref('users'),
-		dbRefMess: firebase.database().ref('messages'),
-		messageLast: [],
-	};
-	getListMessLast= async() =>{
-		await this.state.dbRef.on('child_added', (val) => {
-			let person = val.val();
-			person.username = val.key;
-			if (person.username != User.username) {
-				this.state.dbRefMess
-					.child(User.username)
-					.child(person.username)
-					.on('value', (snapshot) => {
-						try {
-							var key =Object.keys(snapshot.val())[snapshot.numChildren()-1];
-							this.state.dbRefMess
-								.child(User.username)
-								.child(person.username)
-								.child(key)
-								.on('value', (snap) => {
-									var mess = [person.username, snap.val().from, snap.val().message, snap.val().time, snap.val().type];
-									this.state.messageLast.push(mess);
-								});
-						} catch (error) {}
-					});
-			}
-		});
-	}
-	getUSer=()=>{
-		this.state.dbRef.on('child_added', (val) => {
-			let person = val.val();
-			person.username = val.key;
-			if (person.username === User.username) {
-				User.name = person.name;
-			} else {
-				this.setState((prevState) => {
-					return {
-						users: [...prevState.users, person],
-					};
-				});
-			}
-		});
-	}
-	componentWillMount() {
-		this.getListMessLast();
-		this.getUSer();
-	}
+  state = {
+    users: [],
+    dbRef: firebase.database().ref("users"),
+    dbRefMess: firebase.database().ref("messages"),
+    messageLast: [],
+  };
+  getListMessLast = async () => {
+    await this.state.dbRef.on("child_added", (val) => {
+      let person = val.val();
+      person.username = val.key;
+      if (person.username != User.username) {
+        this.state.dbRefMess
+          .child(User.username)
+          .child(person.username)
+          .on("value", (snapshot) => {
+            try {
+              var key = Object.keys(snapshot.val())[snapshot.numChildren() - 1];
+              this.state.dbRefMess
+                .child(User.username)
+                .child(person.username)
+                .child(key)
+                .on("value", (snap) => {
+                  var mess = [
+                    person.username,
+                    snap.val().from,
+                    snap.val().message,
+                    snap.val().time,
+                    snap.val().type,
+                  ];
+                  this.state.messageLast.push(mess);
+                });
+            } catch (error) {}
+          });
+      }
+    });
+  };
+  getUSer = () => {
+    this.state.dbRef.on("child_added", (val) => {
+      let person = val.val();
+      person.username = val.key;
+      if (person.username === User.username) {
+        User.name = person.name;
+      } else {
+        this.setState((prevState) => {
+          return {
+            users: [...prevState.users, person],
+          };
+        });
+      }
+    });
+  };
+  componentWillMount() {
+    this.getListMessLast();
+    this.getUSer();
+  }
 
 	componentWillUnmount() {
 		this.state.dbRef.off();
