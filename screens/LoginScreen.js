@@ -81,9 +81,8 @@ export default class App extends React.Component {
             marginTop: -100,
           }}
         />
-
         <View style={{ width: "80%", alignItems: "center" }}>
-          <Icon name="user-alt" style={styles.iconLeft} size={26} />
+          <Icon name="user-alt" style={styles.iconLeft} size={20} />
           <TextInput
             placeholder="Tài khoản"
             autoFocus={true}
@@ -100,11 +99,11 @@ export default class App extends React.Component {
             value={this.state.password}
             onChangeText={this.handleChange("password")}
           />
-          <Icon name="key" style={styles.iconLeft} size={26} />
+          <Icon name="key" style={styles.iconLeft} size={20} />
           <Icon
             name={this.state.iconName}
             style={styles.iconRight}
-            size={28}
+            size={20}
             onPress={this.showPass}
           />
         </View>
@@ -112,8 +111,9 @@ export default class App extends React.Component {
           <Text style={styles.btnLogIn}>Đăng nhập</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.singUp}>
-          <Text style={styles.btnText}>
-            Bạn chưa có tài khoản? Đăng kí tại đây
+          <Text style={{ fontSize: 16, marginTop: 10 }}>
+            Bạn chưa có tài khoản?{" "}
+            <Text style={styles.btnText}>Đăng kí tại đây</Text>
           </Text>
         </TouchableOpacity>
         <Loading

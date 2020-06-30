@@ -7,17 +7,8 @@ import {
   TextInput,
   Alert,
   AsyncStorage,
-  Container,
-  Header,
-  Content,
-  Button,
-  ListItem,
-  Icon,
-  Left,
-  Body,
-  Right,
-  Switch,
 } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome5";
 import User from "../User";
 import * as ImagePicker from "expo-image-picker";
 import styles from "../constants/style";
@@ -100,42 +91,73 @@ export default class ProfileScreen extends React.Component {
   };
   render() {
     return (
-      <SafeAreaView style={styles.container}>
-        <TouchableOpacity onPress={this.onChooseImagePress}>
-          <Image
-            style={{
-              width: 150,
-              height: 150,
-              resizeMode: "cover",
-              marginBottom: 10,
-              borderRadius: 75,
-            }}
-            source={{ uri: this.state.url }}
-            // source={this.state.imageSource}
-          />
-        </TouchableOpacity>
-        <Text style={{ fontSize: 20 }}>{this.state.name}</Text>
+      <View style={styles.profile}>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            marginBottom: 10,
+          }}
+        >
+          <TouchableOpacity onPress={this.onChooseImagePress}>
+            <Image
+              style={{
+                width: 80,
+                height: 80,
+                marginVertical: 20,
+                marginHorizontal: 20,
+                resizeMode: "cover",
+                marginBottom: 10,
+                borderRadius: 75,
+              }}
+              source={{ uri: this.state.url }}
+              // source={this.state.imageSource}
+            />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 20 }}>{this.state.name}</Text>
+        </View>
         {/* <TextInput
-      		value={this.state.name}
-      		onChangeText={this.handleChange('name')}
-      		style={styles.input}
-      		textAlign={'center'}
-      	/> */}
+					value={this.state.name}
+					onChangeText={this.handleChange('name')}
+					style={styles.input}
+					textAlign={'center'}
+				/> */}
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate("ChangeName")}
         >
-          <Text style={styles.btnChange}>Đổi tên</Text>
+          <View>
+            <Text style={styles.btnChange}>
+              <Icon name="user-edit" size={16} /> Đổi tên
+            </Text>
+          </View>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate("ChangePassword")}
         >
-          <Text style={styles.btnChange}>Đổi mật khẩu</Text>
+          <Text style={styles.btnChange}>
+            <Icon name="unlock" size={16} /> Đổi mật khẩu
+          </Text>
         </TouchableOpacity>
-
+        <TouchableOpacity onPress={() => alert("Thông báo")}>
+          <View>
+            <Text style={styles.btnChange}>
+              <Icon name="bell" size={16} /> Thông báo
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => alert("Cài đặt")}>
+          <View>
+            <Text style={styles.btnChange}>
+              <Icon name="cog" size={16} /> Cài đặt
+            </Text>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity>
           <Text onPress={this._logOut} style={styles.btnLogOut}>
-            Đăng xuất
+            <Icon name="sign-out-alt" size={16} /> Đăng xuất
           </Text>
         </TouchableOpacity>
         <Loading
@@ -143,53 +165,7 @@ export default class ProfileScreen extends React.Component {
           backgroundColor="#ffffff"
           indicatorColor=" #00ffcc"
         />
-      </SafeAreaView>
-      //   <Container>
-      //     <Header />
-      //     <Content>
-      //       <ListItem icon>
-      //         <Left>
-      //           <Button style={{ backgroundColor: "#FF9501" }}>
-      //             <Icon active name="airplane" />
-      //           </Button>
-      //         </Left>
-      //         <Body>
-      //           <Text>Airplane Mode</Text>
-      //         </Body>
-      //         <Right>
-      //           <Switch value={false} />
-      //         </Right>
-      //       </ListItem>
-      //       <ListItem icon>
-      //         <Left>
-      //           <Button style={{ backgroundColor: "#007AFF" }}>
-      //             <Icon active name="wifi" />
-      //           </Button>
-      //         </Left>
-      //         <Body>
-      //           <Text>Wi-Fi</Text>
-      //         </Body>
-      //         <Right>
-      //           <Text>GeekyAnts</Text>
-      //           <Icon active name="arrow-forward" />
-      //         </Right>
-      //       </ListItem>
-      //       <ListItem icon>
-      //         <Left>
-      //           <Button style={{ backgroundColor: "#007AFF" }}>
-      //             <Icon active name="bluetooth" />
-      //           </Button>
-      //         </Left>
-      //         <Body>
-      //           <Text>Bluetooth</Text>
-      //         </Body>
-      //         <Right>
-      //           <Text>On</Text>
-      //           <Icon active name="arrow-forward" />
-      //         </Right>
-      //       </ListItem>
-      //     </Content>
-      //   </Container>
+      </View>
     );
   }
 }
