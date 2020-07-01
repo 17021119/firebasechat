@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
 	SafeAreaView,
 	Text,
@@ -25,8 +25,10 @@ import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 // import RNLocation from 'react-native-location';
 import Hyperlink from 'react-native-hyperlink';
+import EmojiSelector, { Categories } from 'react-native-emoji-selector';
 
-const isIOS = Platform.OS === "ios";
+
+const isIOS = Platform.OS === 'ios';
 
 export default class ChatScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => {
@@ -60,56 +62,51 @@ export default class ChatScreen extends React.Component {
 			this.keyboardEvent(e, false)
 		);
 
-    this.state.dbRef
-      .child(User.username)
-      .child(this.state.person.username)
-      .on("child_added", (value) => {
-        this.setState((prevState) => {
-          return {
-            messageList: [...prevState.messageList, value.val()],
-          };
-        });
-      });
-  }
-  componentWillUnmount() {
-    this.state.dbRef.off();
-    this.keyboardShowListener.remove();
-    this.keyboardHideListener.remove();
-  }
-  keyboardEvent = (event, isShow) => {
-    let heightOS = isIOS ? 60 : 80;
-    let bottomOS = isIOS ? 120 : 140;
-    Animated.parallel([
-      Animated.timing(this.keyboardHeight, {
-        duration: event.duration,
-        toValue: isShow ? heightOS : 0,
-      }),
-      Animated.timing(this.bottomPadding, {
-        duration: event.duration,
-        toValue: isShow ? bottomOS : 60,
-      }),
-    ]).start();
-  };
-  handleChange = (key) => (val) => {
-    this.setState({ [key]: val });
-  };
+		this.state.dbRef
+			.child(User.username)
+			.child(this.state.person.username)
+			.on('child_added', (value) => {
+				this.setState((prevState) => {
+					return {
+						messageList: [...prevState.messageList, value.val()],
+					};
+				});
+			});
+	}
+	componentWillUnmount() {
+		this.state.dbRef.off();
+		this.keyboardShowListener.remove();
+		this.keyboardHideListener.remove();
+	}
+	keyboardEvent = (event, isShow) => {
+		let heightOS = isIOS ? 60 : 80;
+		let bottomOS = isIOS ? 120 : 140;
+		Animated.parallel([
+			Animated.timing(this.keyboardHeight, {
+				duration: event.duration,
+				toValue: isShow ? heightOS : 0,
+			}),
+			Animated.timing(this.bottomPadding, {
+				duration: event.duration,
+				toValue: isShow ? bottomOS : 60,
+			}),
+		]).start();
+	};
+	handleChange = (key) => (val) => {
+		this.setState({ [key]: val });
+	};
 
-  convertTime = (time) => {
-    var d = new Date(time);
-    var c = new Date();
-    var hours = d.getHours();
-    var minutes = "0" + d.getMinutes();
-    var formattedTime = hours + ":" + minutes.substr(-2);
-    if (d.getDate() != c.getDate()) {
-      formattedTime =
-        formattedTime +
-        " ∙ " +
-        d.getDate() +
-        "/" +
-        ("0" + (d.getMonth() + 1)).substr(-2);
-    }
-    return formattedTime;
-  };
+	convertTime = (time) => {
+		var d = new Date(time);
+		var c = new Date();
+		var hours = d.getHours();
+		var minutes = '0' + d.getMinutes();
+		var formattedTime = hours + ':' + minutes.substr(-2);
+		if (d.getDate() != c.getDate()) {
+			formattedTime = formattedTime + ' ∙ ' + d.getDate() + '/' + ('0' + (d.getMonth() + 1)).substr(-2);
+		}
+		return formattedTime;
+	};
 
 	sendMessage = async () => {
 		if (this.state.textMessage.length > 0) {
@@ -128,7 +125,9 @@ export default class ChatScreen extends React.Component {
 		}
 	};
 	getEmotion = () => {
-		Alert.alert('getEmotion');
+		this.setState({
+			textMessage: this.state.textMessage + '😁',
+		});
 	};
 	onChooseImagePress = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync();
@@ -187,7 +186,6 @@ export default class ChatScreen extends React.Component {
 		updates[this.state.person.username + '/' + User.username + '/' + msgId] = message;
 		this.state.dbRef.update(updates);
 		this.refs.loading.show(false);
-		console.log('https://www.google.com/maps/place/' + this.state.latitude + ',' + this.state.longitude);
 	};
 	renderMess = (item) => {
 		if (item.type == 'text') {
@@ -229,7 +227,7 @@ export default class ChatScreen extends React.Component {
 							minWidth: '15%',
 						}}
 					>
-						Vị trí của tôi: {'\n'+item.message}
+						Vị trí của tôi: {'\n' + item.message}
 					</Text>
 				</Hyperlink>
 			);
@@ -269,6 +267,7 @@ export default class ChatScreen extends React.Component {
 		return (
 			<KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
 				<Animated.View style={[styles.bottomBar, { bottom: this.keyboardHeight }]}>
+					{/* <EmojiSelector category={Categories.symbols} onEmojiSelected={(emoji) => console.log(emoji)} />; */}
 					<TouchableOpacity onPress={this.getMap}>
 						<Image
 							source={require('../images/map.png')}
