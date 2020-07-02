@@ -126,7 +126,7 @@ export default class ChangePasswordScreen extends React.Component {
 					<Icon name={this.state.iconName2} style={styles.iconRight} size={26} onPress={this.showPass2} />
 				</View>
 				<TouchableOpacity>
-					<Text style={styles.btnChange} onPress={this.changePassword}>
+					<Text style={styles.btnChangeName} onPress={this.changePassword}>
 						Lưu
 					</Text>
 				</TouchableOpacity>

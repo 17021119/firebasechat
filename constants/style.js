@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 	btnLogIn: {
 		fontSize: 18,
 		color: 'white',
-		backgroundColor: '#0078FF',
+		backgroundColor: '#dc3545',
 		padding: 10,
 		paddingLeft: 20,
 		paddingRight: 20,
@@ -38,6 +38,16 @@ const styles = StyleSheet.create({
 		padding: 10,
 		borderRadius: 3,
 		margin: 5,
+	},
+	btnChangeName: {
+		fontSize: 18,
+		color: 'white',
+		backgroundColor: '#0078FF',
+		padding: 10,
+		borderRadius: 100,
+		margin: 5,
+		paddingLeft: 40,
+		paddingRight: 40,
 	},
 	btnLogOut: {
 		// size: '40%',

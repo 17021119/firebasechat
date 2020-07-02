@@ -162,7 +162,9 @@ export default class ChatScreen extends React.Component {
 		}
 	};
 	getEmotion = () => {
-		Alert.alert('getEmotion');
+		this.setState({
+			textMessage: this.state.textMessage + '😀',
+		});
 	};
 	onChooseImagePress = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync();

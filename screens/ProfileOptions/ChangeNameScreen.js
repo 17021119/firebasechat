@@ -53,7 +53,7 @@ export default class ChangeNameScreen extends React.Component {
 					/>
 				</View>
 				<TouchableOpacity>
-					<Text style={styles.btnChange} onPress={this.changeName}>
+					<Text style={styles.btnChangeName} onPress={this.changeName}>
 						Lưu
 					</Text>
 				</TouchableOpacity>
