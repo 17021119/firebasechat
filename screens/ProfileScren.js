@@ -53,7 +53,7 @@ export default class ProfileScreen extends React.Component {
         .then(() => {
           this.props.navigation.navigate("Home");
           this.props.navigation.navigate("Profile");
-          Alert.alert("Success");
+          Alert.alert("Đổi ảnh đại diện thành công");
           this.refs.loading.show(false);
           console.log(this.state.url);
         })
@@ -113,17 +113,10 @@ export default class ProfileScreen extends React.Component {
                 borderRadius: 75,
               }}
               source={{ uri: this.state.url }}
-              // source={this.state.imageSource}
             />
           </TouchableOpacity>
           <Text style={{ fontSize: 20 }}>{this.state.name}</Text>
         </View>
-        {/* <TextInput
-					value={this.state.name}
-					onChangeText={this.handleChange('name')}
-					style={styles.input}
-					textAlign={'center'}
-				/> */}
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate("ChangeName")}
         >

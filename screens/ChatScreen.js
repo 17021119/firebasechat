@@ -25,8 +25,7 @@ import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 // import RNLocation from 'react-native-location';
 import Hyperlink from 'react-native-hyperlink';
-import EmojiSelector, { Categories } from 'react-native-emoji-selector';
-
+import { log } from 'react-native-reanimated';
 
 const isIOS = Platform.OS === 'ios';
 
@@ -34,8 +33,46 @@ export default class ChatScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 		return {
 			title: navigation.getParam('name'),
+			// headerRight: (
+			// 	<TouchableOpacity
+			// 		onPress={() =>
+			// 			Alert.alert(
+			// 				'Xóa tin nhắn',
+			// 				'Bạn có muốn xóa hết tin nhắn không?',
+			// 				[
+			// 					{
+			// 						text: 'Có',
+			// 						onPress: async() => {
+			// 							await firebase.database().ref('messages/'+ User.username+'/'+this.state.person.username).remove();
+			// 							console.log('test')
+			// 						}
+			// 					},
+			// 					{
+			// 						text: 'Không',
+			// 						style: 'cancel',
+			// 					},
+			// 				],
+			// 				{ cancelable: false }
+			// 			)
+			// 		}
+			// 	>
+			// 		<Image
+			// 			style={{
+			// 				width: 32,
+			// 				height: 32,
+			// 				marginRight: 10,
+			// 				resizeMode: 'cover',
+			// 				tintColor: '#999',
+			// 			}}
+			// 			source={require('../images/trash.png')}
+			// 		/>
+			// 	</TouchableOpacity>
+			// ),
 		};
 	};
+	yesDelete= () => {
+		Alert.alert('Test')
+	}
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -125,9 +162,7 @@ export default class ChatScreen extends React.Component {
 		}
 	};
 	getEmotion = () => {
-		this.setState({
-			textMessage: this.state.textMessage + '😁',
-		});
+		Alert.alert('getEmotion');
 	};
 	onChooseImagePress = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync();
@@ -186,6 +221,7 @@ export default class ChatScreen extends React.Component {
 		updates[this.state.person.username + '/' + User.username + '/' + msgId] = message;
 		this.state.dbRef.update(updates);
 		this.refs.loading.show(false);
+		console.log('https://www.google.com/maps/place/' + this.state.latitude + ',' + this.state.longitude);
 	};
 	renderMess = (item) => {
 		if (item.type == 'text') {
@@ -235,39 +271,75 @@ export default class ChatScreen extends React.Component {
 	};
 	renderRow = ({ item }) => {
 		return (
-			<SafeAreaView
-				style={{
-					flex: 1,
-					flexDirection: 'row',
-					maxWidth: '70%',
-					alignSelf: item.from === User.username ? 'flex-end' : 'flex-start',
-					backgroundColor: item.from === User.username ? '#0078FF' : '#fff',
-					borderRadius: 5,
-					marginBottom: 10,
-				}}
-			>
-				{this.renderMess(item)}
-				<Text
+				<SafeAreaView
 					style={{
-						color: item.from === User.username ? '#fff' : '#000000',
-						padding: 3,
-						fontSize: 11,
-						position: 'absolute',
-						bottom: 0,
-						right: 0,
+						flex: 1,
+						flexDirection: 'row',
+						maxWidth: '70%',
+						alignSelf: item.from === User.username ? 'flex-end' : 'flex-start',
+						backgroundColor: item.from === User.username ? '#0078FF' : '#fff',
+						borderRadius: 5,
+						marginBottom: 10,
 					}}
 				>
-					{this.convertTime(item.time)}
-				</Text>
-			</SafeAreaView>
+					{this.renderMess(item)}
+					<Text
+						style={{
+							color: item.from === User.username ? '#fff' : '#000000',
+							padding: 3,
+							fontSize: 10,
+							position: 'absolute',
+							bottom: 0,
+							right: 0,
+						}}
+					>
+						{this.convertTime(item.time)}
+					</Text>
+				</SafeAreaView>
+
 		);
 	};
+	sendLike =async () =>{
+		let msgId = (await this.state.dbRef.child(User.username).child(this.state.person.username).push()).key;
+		let updates = {};
+		let message = {
+			message: '👍',
+			time: firebase.database.ServerValue.TIMESTAMP,
+			from: User.username,
+			type: 'text',
+		};
+		updates[User.username + '/' + this.state.person.username + '/' + msgId] = message;
+		updates[this.state.person.username + '/' + User.username + '/' + msgId] = message;
+		this.state.dbRef.update(updates);
+	}
+	
+	renderButtonSend =()=>{
+		if(this.state.textMessage.length != 0){
+			return(
+				<TouchableOpacity onPress={this.sendMessage} style={styles.sendButton}>
+						<Image
+							source={require('../images/send.png')}
+							style={{ tintColor: 'white', resizeMode: 'contain', height: 20 }}
+						/>
+					</TouchableOpacity>
+			)
+		}
+		else{
+			return (
+				<TouchableOpacity 
+					onPress={this.sendLike} 
+					style={styles.sendButton} 
+				>
+					<Text style={{left: -2, top: -1 }}>👍</Text>
+				</TouchableOpacity>
+			);
+		}
+	}
 	render() {
 		let { height } = Dimensions.get('window');
 		return (
 			<KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
 				<Animated.View style={[styles.bottomBar, { bottom: this.keyboardHeight }]}>
-					{/* <EmojiSelector category={Categories.symbols} onEmojiSelected={(emoji) => console.log(emoji)} />; */}
 					<TouchableOpacity onPress={this.getMap}>
 						<Image
 							source={require('../images/map.png')}
@@ -311,12 +383,7 @@ export default class ChatScreen extends React.Component {
 						onChangeText={this.handleChange('textMessage')}
 						onPress={Keyboard.dismiss}
 					/>
-					<TouchableOpacity onPress={this.sendMessage} style={styles.sendButton}>
-						<Image
-							source={require('../images/send.png')}
-							style={{ tintColor: 'white', resizeMode: 'contain', height: 20 }}
-						/>
-					</TouchableOpacity>
+					{this.renderButtonSend()}
 				</Animated.View>
 				<FlatList
 					ref={(ref) => (this.FlatList = ref)}
